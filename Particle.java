@@ -1,3 +1,7 @@
+package GrainBoundarySimulation;
+
+import java.awt.*;
+
 /**
  * Created by yulia on 27.07.16.
  * This is a class that describes precipitates
@@ -15,7 +19,7 @@ public class Particle {
         this.y = y;
         this.z = z;
         this.radius = radius;
-        this.stressRadius = 5;
+        this.stressRadius = radius * 3 / 2;
     }
 
     public int getX() {
@@ -39,35 +43,35 @@ public class Particle {
     {
 
         // Stress field
-        for(int i = -stressRadius; i < stressRadius; i++)
-        {
-            for(int j = -stressRadius; j < stressRadius; j++)
-            {
-                for(int k = -stressRadius; k < stressRadius; k++)
+        for(int i = -stressRadius - radius; i < stressRadius + radius; i++)
+            for (int j = -stressRadius - radius; j < stressRadius + radius; j++)
+                for (int k = -stressRadius - radius; k < stressRadius + radius; k++)
                 {
                     int xPosition = x + i;
                     int yPosition = y + j;
                     int zPosition = z + k;
 
-                    int stressRadiusCurrent = (int)Math.round(Math.sqrt(stressRadius*stressRadius - z*z));
-
-                    if((i*i + j*j) < (stressRadiusCurrent*stressRadiusCurrent))
+                    if (zPosition == 0)
                     {
-                        int distance = (int)Math.round(Math.sqrt(i*i + j*j));
-                        char c = (char)(distance + '0');
+                        int distanceSquare = i * i + j * j + k * k;
+                        int distance = (int) Math.ceil(Math.sqrt(distanceSquare)) - radius;
 
-                        if (xPosition >= 0 && xPosition < canvas.getWidth() && yPosition >= 0 && yPosition < canvas.getHeight())
-                            canvas.setPoint(xPosition, yPosition, c);
+                        if (distanceSquare < (radius + stressRadius) * (radius + stressRadius) && distanceSquare >= radius * radius)
+                        {
+                            char c = (char) (distance * 5 / stressRadius + '0');
+                            if (!Character.isDigit(c))
+                                c = '0';
+
+                            if (xPosition >= 0 && xPosition < canvas.getWidth() && yPosition >= 0 && yPosition < canvas.getHeight())
+                                canvas.setPoint(xPosition, yPosition, c);
+                        }
+
+                        else if(distanceSquare < radius * radius)
+                        {
+                            if (xPosition >= 0 && xPosition < canvas.getWidth() && yPosition >= 0 && yPosition < canvas.getHeight())
+                                canvas.setPoint(xPosition, yPosition, 'X');
+                        }
                     }
-
-
                 }
-
-            }
-        }
-
-        // if particle is at z=0
-        if(z == 0)
-            canvas.setPoint(x, y, 'X');
     }
 }

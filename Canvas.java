@@ -1,6 +1,11 @@
+package GrainBoundarySimulation;
+
+import java.awt.*;
+
 /**
  * Created by yulia on 27.07.16.
  */
+
 public class Canvas {
 
     private int width;
@@ -46,5 +51,25 @@ public class Canvas {
         }
 
         System.out.println();
+    }
+
+    public void draw(Graphics g)
+    {
+        for(int i = 0; i < height; i++)
+        {
+            for(int j = 0; j < width; j++)
+            {
+                if(Character.isDigit(matrix[i][j])) {
+                    int color = Character.digit(matrix[i][j], 10)*255/9;
+                    g.setColor(new Color(color, color, color));
+                }
+                else if(matrix[i][j] == 'X')
+                    g.setColor(Color.red);
+                else
+                    g.setColor(new Color(220, 220, 220));
+
+                g.fillRect(j, i, 1, 1);
+            }
+        }
     }
 }
