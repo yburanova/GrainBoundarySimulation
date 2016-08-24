@@ -40,8 +40,35 @@ public class GrainBoundary {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
             int z = random.nextInt(depth);
+            boolean isClose = false;
 
-            particles.add(new Particle(x, y, z, maxRadius));
+            if(particles.size() == 0)
+                particles.add(new Particle(x, y, z, maxRadius));
+            else
+            {
+                for (int j = 0; j < particles.size(); j++) {
+                    int xDifference = x - particles.get(j).getX();
+                    int yDifference = y - particles.get(j).getY();
+                    int zDifference = z - particles.get(j).getZ();
+
+                    int distance = (int)Math.round(Math.sqrt(xDifference*xDifference + yDifference*yDifference + zDifference*zDifference));
+                    if(distance < 2 * maxRadius * 5 / 2)
+                    {
+                        isClose = true;
+                        break;
+                    }
+                }
+
+                if (isClose == true)
+                {
+                    i--;
+                    continue;
+                }
+                else
+                {
+                    particles.add(new Particle(x, y, z, maxRadius));
+                }
+            }
 
         }
     }
@@ -82,7 +109,7 @@ public class GrainBoundary {
     public static void main(String[] args)
     {
         // GB width, height, depth, a number of particles and a radius
-        grainBoundary = new GrainBoundary(1000, 500, 500, 5, 50);
+        grainBoundary = new GrainBoundary(1000, 500, 100, 7, 50);
         grainBoundary.run();
     }
 }
