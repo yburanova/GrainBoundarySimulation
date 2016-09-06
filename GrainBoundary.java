@@ -109,7 +109,7 @@ public class GrainBoundary {
     public static void main(String[] args)
     {
         // GB width, height, depth, a number of particles and a radius
-        grainBoundary = new GrainBoundary(1000, 500, 100, 7, 50);
+        grainBoundary = new GrainBoundary(1000, 500, 500, 20, 50);
         grainBoundary.run();
     }
 }
